@@ -92,23 +92,27 @@ public abstract class ClothingAdviser {
      * @return  The string containing the command list response including failure if appropriate.
      */
     public String getResponse() {
-        StringBuilder sb = new StringBuilder();
+        String response;
 
         //  Making sure the list is not null and that it does begin with the remove pj command and ends with leaving
         //  the house.
         if (!isValidCommandList()) {
-            sb.append(FAILURE);
+            response = FAILURE;
         }
         else {
             //  Getting response list.
-            sb.append(iterateCommands());
+            response = iterateCommands();
         }
 
-        LOGGER.info("{}", sb);
+        LOGGER.info(response);
 
-        return sb.toString();
+        return response;
     }
 
+    /**
+     *   Method to iterate through the commands and string together the resulting responses.
+     * @return  String containing the resulting responses.
+     */
     private String iterateCommands() {
         StringBuilder sb = new StringBuilder();
         int currentCommand;
@@ -126,7 +130,6 @@ public abstract class ClothingAdviser {
                 else {
                     first = false;
                 }
-
                 sb.append(currentResponse);
 
                 //  If the response failed, break out by throwing exception (appends fail).
@@ -143,7 +146,6 @@ public abstract class ClothingAdviser {
                 break;
             }
         }
-
         return sb.toString();
     }
     /**
