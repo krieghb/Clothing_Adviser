@@ -75,7 +75,7 @@ public abstract class ClothingAdviser {
         //  Attempting to parse, setting to HOT and null if it fails.
         try {
             weatherType = Weather.valueOf(commandOrder[0].toUpperCase());
-            commandList = commands.substring(weatherType.weatherString.length()).trim().split(", ");
+            commandList = commands.substring(weatherType.weatherString.length()).trim().split(",\\s*");
         }
         catch (IllegalArgumentException e) {
             weatherType = Weather.HOT;
@@ -93,7 +93,7 @@ public abstract class ClothingAdviser {
      */
     public String getResponse() {
         StringBuilder sb = new StringBuilder();
-        int currentCommand;
+        int currentCommand = -1;
         String currentResponse;
         boolean first = true;
 
@@ -122,8 +122,8 @@ public abstract class ClothingAdviser {
                 }
             }
             catch (NumberFormatException e) {
-                LOGGER.error("List contains a non-integer", e);
-                sb.append(FAILURE);
+                LOGGER.error("List contains a non-integer");
+                sb.append(", ").append(FAILURE);
             }
         }
 
