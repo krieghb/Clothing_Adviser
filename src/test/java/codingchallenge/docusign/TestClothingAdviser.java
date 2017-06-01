@@ -46,7 +46,7 @@ public class TestClothingAdviser {
         in = "HOT 8, 6, 4, 2, 1, 7";
         expected = "Removing PJs, shorts, t-shirt, sun visor, sandals, leaving house";
         clothingAdviser = new ClothingAdviserHot(in);
-        actual = clothingAdviser.decideWeather();
+        actual = clothingAdviser.getResponse();
         assertEquals(expected, actual);
     }
 
@@ -56,7 +56,7 @@ public class TestClothingAdviser {
         in = "COLD 8, 6, 3, 4, 2, 5, 1, 7";
         expected = "Removing PJs, pants, socks, shirt, hat, jacket, boots, leaving house";
         clothingAdviser = new ClothingAdviserCold(in);
-        actual = clothingAdviser.decideWeather();
+        actual = clothingAdviser.getResponse();
         assertEquals(expected, actual);
 
     }
@@ -67,7 +67,7 @@ public class TestClothingAdviser {
         in = "COLD 8, 6, 3, 4, 2, 5, 7";
         expected = "Removing PJs, pants, socks, shirt, hat, jacket, fail";
         clothingAdviser = new ClothingAdviserCold(in);
-        actual = clothingAdviser.decideWeather();
+        actual = clothingAdviser.getResponse();
         assertEquals(expected, actual);
 
     }
@@ -78,7 +78,7 @@ public class TestClothingAdviser {
         in = "COLD 6";
         expected = "fail";
         clothingAdviser = new ClothingAdviserCold(in);
-        actual = clothingAdviser.decideWeather();
+        actual = clothingAdviser.getResponse();
         assertEquals(expected, actual);
 
     }
@@ -89,7 +89,7 @@ public class TestClothingAdviser {
         in = "HOT 8, 6, 6";
         expected = "Removing PJs, shorts, fail";
         clothingAdviser = new ClothingAdviserHot(in);
-        actual = clothingAdviser.decideWeather();
+        actual = clothingAdviser.getResponse();
         assertEquals(expected, actual);
 
     }
@@ -100,7 +100,7 @@ public class TestClothingAdviser {
         in = "HOT 8, 6, 3";
         expected = "Removing PJs, shorts, fail";
         clothingAdviser = new ClothingAdviserHot(in);
-        actual = clothingAdviser.decideWeather();
+        actual = clothingAdviser.getResponse();
         assertEquals(expected, actual);
 
     }

@@ -1,6 +1,4 @@
 package codingchallenge.docusign;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *  @author Krieghbaum
@@ -8,7 +6,6 @@ import org.slf4j.LoggerFactory;
  *  Child class of ClothingAdviser specific to the Cold weather.
  */
 public class ClothingAdviserCold extends ClothingAdviser {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ClothingAdviserCold.class);
 
     //  Child specific articles of clothing.
     protected boolean haveSocks;

@@ -1,8 +1,5 @@
 package codingchallenge.docusign;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  *  @author Krieghbaum
  *
@@ -10,7 +7,6 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class ClothingAdviserHot extends ClothingAdviser {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ClothingAdviserHot.class);
 
     //  Child specific constants.
     private static final String FOOTWEAR = "sandals";

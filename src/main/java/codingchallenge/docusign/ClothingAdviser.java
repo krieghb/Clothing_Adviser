@@ -9,6 +9,34 @@ import org.slf4j.LoggerFactory;
  * Parent abstract class for displaying whether a successful leaving of the house is achieved.
  *  Two possibilities in the weatherString at this point are possible:  HOT or COLD.
  *  What is worn and in what order is decided by the weatherString.
+ *
+ *  Temperature Type (one of the following)
+ *  HOT
+ *  COLD
+ *  Comma separated list of numeric commands
+ *  Command	Description	HOT Response	COLD Response
+ *  1	Put on footwear	“sandals”	“boots”
+ *  2	Put on headwear	“sun visor”	“hat”
+ *  3	Put on socks	fail	“socks”
+ *  4	Put on shirt	“t-shirt”	“shirt”
+ *  5	Put on jacket	fail	“jacket”
+ *  6	Put on pants	“shorts”	“pants”
+ *  7	Leave house	“leaving house”	“leaving house”
+ *  8	Take off pajamas	“Removing PJs”	“Removing PJs”
+ *
+ *  Rules:
+ *    Initial state is in your house with your pajamas on
+ *    Pajamas must be taken off before anything else can be put on
+ *    Only 1 piece of each type of clothing may be put on
+ *    You cannot put on socks when it is hot
+ *    You cannot put on a jacket when it is hot
+ *    Socks must be put on before shoes
+ *    Pants must be put on before shoes
+ *    The shirt must be put on before the headwear or jacket
+ *    You cannot leave the house until all items of clothing are on (except socks and a jacket when it’s hot)
+ *    If an invalid command is issued, respond with “fail” and stop processing commands
+ *
+ *
  */
 public abstract class ClothingAdviser {
     private static final Logger LOGGER = LoggerFactory.getLogger(ClothingAdviser.class);
@@ -50,7 +78,6 @@ public abstract class ClothingAdviser {
             commandList = commands.substring(weatherType.weatherString.length()).trim().split(", ");
         }
         catch (IllegalArgumentException e) {
-//            LOGGER.info("Exception parsing:  {}", e);
             weatherType = Weather.HOT;
             commandList = null;
         }
@@ -64,11 +91,8 @@ public abstract class ClothingAdviser {
      *
      * @return  The string containing the command list response including failure if appropriate.
      */
-    public String decideWeather() {
+    public String getResponse() {
         StringBuilder sb = new StringBuilder();
-        boolean first = true;
-        int currentCommand;
-        String currentResponse;
 
         //  Making sure the list is not null and that it does begin with the remove pj command and ends with leaving
         //  the house.
@@ -76,31 +100,8 @@ public abstract class ClothingAdviser {
             sb.append(FAILURE);
         }
         else {
-            //  Looping through each command and getting response from child.
-            for (String str : commandList) {
-                try {
-                    currentCommand = Integer.parseInt(str.trim());
-                    currentResponse = getResponse(currentCommand);
-                    if (!first) {
-                        sb.append(", ");
-                    }
-                    else {
-                        first = false;
-                    }
-
-                    sb.append(currentResponse);
-
-                    //  If the response failed, break out by throwing exception (appends fail).
-                    if (currentResponse.equals(FAILURE)) {
-                        break;
-                    }
-                }
-                catch (NumberFormatException e) {
-                    LOGGER.error("List contains a non-integer", e);
-                    sb.append(FAILURE);
-                    break;
-                }
-            }
+            //  Getting response list.
+            sb.append(iterateCommands());
         }
 
         LOGGER.info("{}", sb);
@@ -108,6 +109,43 @@ public abstract class ClothingAdviser {
         return sb.toString();
     }
 
+    private String iterateCommands() {
+        StringBuilder sb = new StringBuilder();
+        int currentCommand;
+        String currentResponse;
+        boolean first = true;
+        boolean shouldBreak = false;
+
+        for (String str : commandList) {
+            try {
+                currentCommand = Integer.parseInt(str.trim());
+                currentResponse = getResponse(currentCommand);
+                if (!first) {
+                    sb.append(", ");
+                }
+                else {
+                    first = false;
+                }
+
+                sb.append(currentResponse);
+
+                //  If the response failed, break out by throwing exception (appends fail).
+                if (currentResponse.equals(FAILURE)) {
+                    shouldBreak = true;
+                }
+            }
+            catch (NumberFormatException e) {
+                LOGGER.error("List contains a non-integer", e);
+                sb.append(FAILURE);
+                shouldBreak = true;
+            }
+            if (shouldBreak) {
+                break;
+            }
+        }
+
+        return sb.toString();
+    }
     /**
      *  Method to return if the command list is valid, which includes being non-null, starting with the
      *      Remove PJ command and ending with the Leave command.

@@ -20,7 +20,7 @@ public class ClothingMain {
         Scanner scanner = new Scanner(System.in);
         LOGGER.info("Enter command( (q)uits ):  \n");
         intake = scanner.nextLine();
-        while (!intake.toUpperCase().equals("Q")) {
+        while (!intake.equalsIgnoreCase("Q")) {
             cde.executeCommand(intake);
             LOGGER.info("Enter command( (q)uits ):  \n");
             intake = scanner.nextLine();
