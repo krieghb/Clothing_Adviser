@@ -118,33 +118,27 @@ public abstract class ClothingAdviser {
         int currentCommand;
         String currentResponse;
         boolean first = true;
-        boolean shouldBreak = false;
 
-        for (String str : commandList) {
-            try {
+        try {
+            for (String str : commandList) {
                 currentCommand = Integer.parseInt(str.trim());
                 currentResponse = getResponse(currentCommand);
                 if (!first) {
                     sb.append(", ");
-                }
-                else {
+                } else {
                     first = false;
                 }
                 sb.append(currentResponse);
 
                 //  If the response failed, break out by throwing exception (appends fail).
                 if (currentResponse.equals(FAILURE)) {
-                    shouldBreak = true;
+                    break;
                 }
             }
-            catch (NumberFormatException e) {
-                LOGGER.error("List contains a non-integer", e);
-                sb.append(FAILURE);
-                shouldBreak = true;
-            }
-            if (shouldBreak) {
-                break;
-            }
+        }
+        catch (NumberFormatException e) {
+            LOGGER.error("List contains a non-integer", e);
+            sb.append(FAILURE);
         }
         return sb.toString();
     }
