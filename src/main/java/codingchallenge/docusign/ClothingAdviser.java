@@ -92,54 +92,42 @@ public abstract class ClothingAdviser {
      * @return  The string containing the command list response including failure if appropriate.
      */
     public String getResponse() {
-        String response;
-
-        //  Making sure the list is not null and that it does begin with the remove pj command and ends with leaving
-        //  the house.
-        if (!isValidCommandList()) {
-            response = FAILURE;
-        }
-        else {
-            //  Getting response list.
-            response = iterateCommands();
-        }
-
-        LOGGER.info(response);
-
-        return response;
-    }
-
-    /**
-     *   Method to iterate through the commands and string together the resulting responses.
-     * @return  String containing the resulting responses.
-     */
-    private String iterateCommands() {
         StringBuilder sb = new StringBuilder();
         int currentCommand;
         String currentResponse;
         boolean first = true;
 
-        try {
-            for (String str : commandList) {
-                currentCommand = Integer.parseInt(str.trim());
-                currentResponse = getResponse(currentCommand);
-                if (!first) {
-                    sb.append(", ");
-                } else {
-                    first = false;
-                }
-                sb.append(currentResponse);
-
-                //  If the response failed, break out by throwing exception (appends fail).
-                if (currentResponse.equals(FAILURE)) {
-                    break;
-                }
-            }
-        }
-        catch (NumberFormatException e) {
-            LOGGER.error("List contains a non-integer", e);
+        //  Making sure the list is not null and that it does begin with the remove pj command and ends with leaving
+        //  the house.
+        if (!isValidCommandList()) {
             sb.append(FAILURE);
         }
+        else {
+            try {
+                //  Looping through each command and getting the appropriate response.
+                for (String str : commandList) {
+                    currentCommand = Integer.parseInt(str.trim());
+                    currentResponse = getResponse(currentCommand);
+                    if (!first) {
+                        sb.append(", ");
+                    } else {
+                        first = false;
+                    }
+                    sb.append(currentResponse);
+
+                    //  If the response failed, break out by throwing exception (appends fail).
+                    if (currentResponse.equals(FAILURE)) {
+                        break;
+                    }
+                }
+            }
+            catch (NumberFormatException e) {
+                LOGGER.error("List contains a non-integer", e);
+                sb.append(FAILURE);
+            }
+        }
+
+        LOGGER.info("{}", sb);
         return sb.toString();
     }
     /**
