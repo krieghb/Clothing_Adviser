@@ -8,7 +8,6 @@ package codingchallenge.docusign;
 public class ClothingAdviserExe {
 
     //  Parent class to be extended.
-    private ClothingAdviser hotCold;
     private String command;
 
     public ClothingAdviserExe() {
@@ -36,7 +35,7 @@ public class ClothingAdviserExe {
      *  Method to execute the command set in the command variable.
      */
     private void executeCommand() {
-        hotCold = new ClothingAdviserHot(command);
+        ClothingAdviser hotCold = new ClothingAdviserHot(command);
         if (Weather.COLD.equals(hotCold.splitCommands(command))) {
             hotCold = new ClothingAdviserCold(command);
         }
