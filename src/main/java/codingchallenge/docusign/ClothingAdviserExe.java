@@ -35,9 +35,12 @@ public class ClothingAdviserExe {
      *  Method to execute the command set in the command variable.
      */
     private void executeCommand() {
-        ClothingAdviser hotCold = new ClothingAdviserHot(command);
-        if (Weather.COLD.equals(hotCold.splitCommands(command))) {
+        ClothingAdviser hotCold;
+        if (command.startsWith("COLD")) {
             hotCold = new ClothingAdviserCold(command);
+        }
+        else {
+            hotCold = new ClothingAdviserHot(command);
         }
 
         hotCold.getResponse();
